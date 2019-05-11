@@ -6,11 +6,12 @@
 ## 3. 免费用户每个月最多只能压500次，可通过多注册几个邮箱的方式解决次数的限制
 import os.path
 import time
+import json
 
 import tinify
 
-fromPath = "./src"  # source dir path
-toPath = "./dest"  # dest dir path
+fromPath = "./source"  # source dir path
+toPath = "./compress"  # dest dir path
 
 # 压缩图片的key
 online_key_list = [
@@ -68,24 +69,25 @@ def compress_online(source_path, output_path):
     return result
 
 
-for root, dirs, files in os.walk(fromPath):
-    newToPath = toPath
-    from_abs_path = os.path.abspath(fromPath)
-    to_abs_path = os.path.abspath(toPath)
+if __name__ == '__main__':
+    for root, dirs, files in os.walk(fromPath):
+        newToPath = toPath
+        from_abs_path = os.path.abspath(fromPath)
+        to_abs_path = os.path.abspath(toPath)
 
-    for file_name in files:
-        source_path = os.path.abspath(os.path.join(root, file_name))
-        rel_path = os.path.relpath(source_path, from_abs_path)
-        target_path = os.path.join(to_abs_path, rel_path)
-        fileName, fileSuffix = os.path.splitext(file_name)  # 分解文件名的扩展名
-        if fileSuffix == '.png' or fileSuffix == '.jpg':
-            # 在线压缩
-            parent_dir = os.path.dirname(target_path)
-            if not os.path.exists(parent_dir):
-                os.makedirs(parent_dir)
-            if not compress_online(source_path, target_path):
-                print("压缩失败，检查报错信息")
-                exit()
-            pass
-        else:
-            pass
+        for file_name in files:
+            source_path = os.path.abspath(os.path.join(root, file_name))
+            rel_path = os.path.relpath(source_path, from_abs_path)
+            target_path = os.path.join(to_abs_path, rel_path)
+            fileName, fileSuffix = os.path.splitext(file_name)  # 分解文件名的扩展名
+            if fileSuffix == '.png' or fileSuffix == '.jpg':
+                # 在线压缩
+                parent_dir = os.path.dirname(target_path)
+                if not os.path.exists(parent_dir):
+                    os.makedirs(parent_dir)
+                if not compress_online(source_path, target_path):
+                    print("压缩失败，检查报错信息")
+                    exit()
+                pass
+            else:
+                pass
