@@ -6,12 +6,12 @@
 ## 3. 免费用户每个月最多只能压500次，可通过多注册几个邮箱的方式解决次数的限制
 import os.path
 import time
-import json
+import argparse
 
 import tinify
 
 fromPath = "./source"  # source dir path
-toPath = "./compress"  # dest dir path
+toPath = "./compress"  # compress dir path
 
 # 压缩图片的key
 online_key_list = [
@@ -70,6 +70,20 @@ def compress_online(source_path, output_path):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='帮助信息')
+    parser.add_argument('--source', type=str, default=fromPath, help='需要压缩的源目录')
+    parser.add_argument('--output', type=str, default=toPath, help='输出的目录')
+    args = parser.parse_args()
+
+    print('source_path = '+args.source)
+    print('output_path = '+args.output)
+    fromPath = args.source
+    toPath = args.output
+
+    if not os.path.exists(fromPath):
+        print('源目录不存在，程序退出')
+        exit()
+
     for root, dirs, files in os.walk(fromPath):
         newToPath = toPath
         from_abs_path = os.path.abspath(fromPath)
