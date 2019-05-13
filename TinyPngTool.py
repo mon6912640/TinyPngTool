@@ -43,7 +43,12 @@ def compress_online(source_path, output_path):
         # Verify your API key and account limit.
         # 如果key值无效 换一个key继续压缩
         print("key值无效 换一个继续。。。")
-        online_key = next(online_key_list_iter)
+        try:
+            online_key = next(online_key_list_iter)
+        except:
+            print('配置的key已经用完了，请到官网申请更多的key https://tinypng.com/developers')
+            result = False
+            return result
         compress_online(source_path, output_path)  # 递归方法 继续读取
         result = True
     except tinify.ClientError as e:
@@ -96,6 +101,13 @@ def create_db():
     cr.execute('create table if not exists `md5` (id text primary key, md5_value text)')
 
 
+def handle_compress_error():
+    # 改函数只在调用压缩api错误时候处理，commit数据库，保存之前已经正确处理的数据
+    conn.commit()
+    cr.close()
+    conn.close()
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='帮助信息')
     parser.add_argument('--source', type=str, default=from_path, help='需要压缩的源目录')
@@ -146,7 +158,16 @@ if __name__ == '__main__':
                 cr.execute('select * from md5 where id=?', (key_str,))
                 values = cr.fetchone()
                 if values is None:  # 数据库不存在，则需要上传压缩图片
-                    need_upload = True
+                    cr.execute('select md5_value from `md5` where md5_value=?', (key_str,))
+                    if cr.fetchone() is not None:  # 主键不存在但存在于压缩值中，则表示这个图片是已经压缩过了，无需做处理
+                        cache_file = os.path.join(cache_path, key_str + ext)
+                        if not os.path.exists(cache_file):  # 如果没有缓存文件，则复制一份到缓存目录以备后用
+                            shutil.copyfile(source_path, cache_file)
+                        shutil.copyfile(source_path, target_path)  # 不做处理，直接复制到目标目录
+                        print(source_path + ' 已经压缩过了，不做处理')
+                        pass
+                    else:
+                        need_upload = True
                 else:  # 数据库存在
                     is_in_db = True
                     output_md5 = values[1]
@@ -158,12 +179,13 @@ if __name__ == '__main__':
                         pass
                     else:  # 不存在缓存文件，则上传压缩图片
                         need_upload = True
-                        print('数据库存在，但没有缓存 ' + source_path)
+                        print(source_path + ' 数据库存在，但没有缓存')
                         pass
 
                 if need_upload:
                     if not compress_online(source_path, target_path):
                         print("压缩失败，检查报错信息")
+                        handle_compress_error()
                         exit()
                     else:
                         # 上传压缩成功并下载压缩文件回来了
@@ -173,12 +195,10 @@ if __name__ == '__main__':
 
                         if is_in_db:
                             # 原来数据库有记录，则更新数据库
-                            print('db update ' + output_md5)
                             cr.execute('update md5 set md5_value=? where id=?', (output_md5, source_md5))
                             pass
                         else:
                             # 数据库没有记录，这插入新数据
-                            print('db insert ' + output_md5)
                             cr.execute('insert into md5 (id, md5_value) values(?,?)', (source_md5, output_md5))
                             pass
 
@@ -190,6 +210,6 @@ if __name__ == '__main__':
     print('输出 %s 个文件' % file_count)
     print('总用时', end - start)
 
-    conn.commit()
+    conn.commit()  # 数据库需要commit之后才会真正写进文件，不然不会生效
     cr.close()
     conn.close()
