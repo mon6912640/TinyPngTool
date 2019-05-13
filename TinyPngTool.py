@@ -142,7 +142,6 @@ if __name__ == '__main__':
     create_db()  # 创建数据库
 
     for root, dirs, files in os.walk(from_path):
-        newToPath = to_path
         from_abs_path = os.path.abspath(from_path)
         to_abs_path = os.path.abspath(to_path)
 
@@ -150,7 +149,7 @@ if __name__ == '__main__':
             source_path = os.path.abspath(os.path.join(root, file_name))
             rel_path = os.path.relpath(source_path, from_abs_path)
             target_path = os.path.join(to_abs_path, rel_path)
-            fileName, ext = os.path.splitext(file_name)  # 分解文件名的扩展名
+            file_name_without_ext, ext = os.path.splitext(file_name)  # 分解文件名的扩展名
             if ext == '.png' or ext == '.jpg':
                 # 在线压缩
                 parent_dir = os.path.dirname(target_path)
