@@ -11,6 +11,7 @@ import hashlib
 import time
 import sqlite3
 import shutil
+import json
 
 import tinify
 
@@ -24,6 +25,14 @@ online_key_list = [
     "RdHoRF9i936xXJCP-ES2c9YCHB0MhxOh",
     "q20BBKkn5t6_AZBxYL1sJcLiW0a4Cufq",  # 可以继续添加  防止一个key不够
 ]
+
+# 加载外部配置
+with open('./config.json', 'r', encoding='utf-8') as f:
+    config = json.loads(f.read())
+    online_key_list = config['keys']
+    from_path = config['sourcePath']
+    to_path = config['outputPath']
+
 online_key_list_iter = iter(online_key_list)
 online_key = next(online_key_list_iter)
 

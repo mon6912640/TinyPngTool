@@ -1,4 +1,10 @@
 {
   "sourcePath": "./source",
-  "targetPath": "./compress"
+  "outputPath": "./fuck",
+
+  "keys": [
+    "G2oCafKlhjcHoHQokyvnkz6Rn6LoOlOl",
+    "RdHoRF9i936xXJCP-ES2c9YCHB0MhxOh",
+    "q20BBKkn5t6_AZBxYL1sJcLiW0a4Cufq"
+  ]
 }
