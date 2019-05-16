@@ -117,19 +117,12 @@ def handle_compress_error():
     conn.close()
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='帮助信息')
-    parser.add_argument('--source', type=str, default=from_path, help='需要压缩的源目录')
-    parser.add_argument('--output', type=str, default=to_path, help='输出的目录')
-    args = parser.parse_args()
-
-    print('source_path = ' + args.source)
-    print('output_path = ' + args.output)
-    from_path = args.source
-    to_path = args.output
-
+def run(p_soure_path, p_output_path):
     file_count = 0
     start = time.time()
+
+    from_path = p_soure_path
+    to_path = p_output_path
 
     if not os.path.exists(from_path):
         print('源目录不存在，程序退出')
@@ -221,3 +214,14 @@ if __name__ == '__main__':
     conn.commit()  # 数据库需要commit之后才会真正写进文件，不然不会生效
     cr.close()
     conn.close()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='帮助信息')
+    parser.add_argument('--source', type=str, default=from_path, help='需要压缩的源目录')
+    parser.add_argument('--output', type=str, default=to_path, help='输出的目录')
+    args = parser.parse_args()
+
+    print('source_path = ' + args.source)
+    print('output_path = ' + args.output)
+    run(args.source, args.output)

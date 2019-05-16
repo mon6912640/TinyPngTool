@@ -1,6 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Example user template template
 ### Example user template
+cache
+compress
+source
 
 # IntelliJ project files
 .idea
@@ -93,6 +96,7 @@ celerybeat-schedule
 # Environments
 .env
 .venv
+venv1
 env/
 venv/
 ENV/
