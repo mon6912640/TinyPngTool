@@ -57,9 +57,8 @@ def compress_online(source_path, output_path):
         except:
             print('配置的key已经用完了，请到官网申请更多的key https://tinypng.com/developers')
             result = False
-            return result
-        compress_online(source_path, output_path)  # 递归方法 继续读取
-        result = True
+        else:
+            result = compress_online(source_path, output_path)  # 递归方法 继续读取
     except tinify.ClientError as e:
         # Check your source image and request options.
         print("Check your source image and request options. %s" % e.message)
@@ -72,8 +71,7 @@ def compress_online(source_path, output_path):
         # A network connection error occurred.
         print("网络故障。。。休息1秒继续")
         time.sleep(1)
-        compress_online(source_path, output_path)  # 递归方法 继续读取
-        result = True
+        result = compress_online(source_path, output_path)  # 递归方法 继续读取
     except Exception as e:
         # Something else went wrong, unrelated to the Tinify API.
         print("Something else went wrong, unrelated to the Tinify API.  %s" % e.message)
