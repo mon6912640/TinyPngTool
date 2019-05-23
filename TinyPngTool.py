@@ -174,7 +174,7 @@ def handle_file(source_path, target_path):
             pass
 
     if need_upload:
-        if not compress_online(source_path, target_path):
+        if not compress_online(str(source_path), str(target_path)):
             print("压缩失败，检查报错信息")
             close_db()
             return False
@@ -228,7 +228,7 @@ def run(p_source_path, p_output_path):
         for v in list_file:
             if v.suffix == '.png' or v.suffix == '.jpg':
                 path_rel = v.relative_to(path_source)
-                path_target = path_output / path_rel
+                path_target = path_output / path_source.name / path_rel
                 if handle_file(v, path_target):
                     file_count += 1
         pass
