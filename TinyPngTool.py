@@ -8,10 +8,13 @@ import shutil
 import socket
 import sqlite3
 import time
-from pathlib import Path, PurePath
+from pathlib import Path
 
 import socks
-import tinify
+
+import errors
+# import tinify
+import tinyHttp
 
 from_path = "./source"  # source dir path
 to_path = "./compress"  # compress dir path
@@ -54,15 +57,17 @@ def compress_online(source_path, output_path):
     global online_key
     compress_key = online_key
 
-    tinify.key = compress_key
+    # tinify.key = compress_key
+    tinyHttp.key = compress_key
     # if proxy:
     #     tinify.proxy = proxy
     print('上传压缩图片...' + source_path, end=' ')
     result = False
     try:
-        source = tinify.from_file(source_path)
-        source.to_file(output_path)
-    except tinify.AccountError as e:
+        # source = tinify.from_file(source_path)
+        # source.to_file(output_path)
+        tinyHttp.compress(source_path, output_path)
+    except errors.AccountError as e:
         # Verify your API key and account limit.
         # 如果key值无效 换一个key继续压缩
         print("key值无效 换一个继续。。。")
@@ -73,22 +78,22 @@ def compress_online(source_path, output_path):
             result = False
         else:
             result = compress_online(source_path, output_path)  # 递归方法 继续读取
-    except tinify.ClientError as e:
+    except errors.ClientError as e:
         # Check your source image and request options.
         print("Check your source image and request options. %s" % e.message)
         result = False
-    except tinify.ServerError as e:
+    except errors.ServerError as e:
         # Temporary issue with the Tinify API.
         print("Temporary issue with the Tinify API. %s" % e.message)
         result = False
-    except tinify.ConnectionError as e:
+    except errors.ConnectError as e:
         # A network connection error occurred.
         print("网络故障。。。休息1秒继续")
         time.sleep(1)
         result = compress_online(source_path, output_path)  # 递归方法 继续读取
     except Exception as e:
         # Something else went wrong, unrelated to the Tinify API.
-        print("Something else went wrong, unrelated to the Tinify API.  %s" % e.message)
+        print("Something else went wrong, unrelated to the Tinify API.  %s" % e)
         result = False
     else:
         if os.path.exists(source_path) and os.path.exists(output_path):
