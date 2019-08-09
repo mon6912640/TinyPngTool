@@ -24,7 +24,7 @@ proxy = ''
 db_open = False
 
 # 错误等待重试时间间隔
-ERR_WAIT_TIME = 1;
+ERR_WAIT_TIME = 1
 
 # 压缩图片的key
 online_key_list = [
