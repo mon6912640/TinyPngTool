@@ -23,6 +23,9 @@ proxy = ''
 # 数据库打开标识
 db_open = False
 
+# 错误等待重试时间间隔
+ERR_WAIT_TIME = 1;
+
 # 压缩图片的key
 online_key_list = [
     'G2oCafKlhjcHoHQokyvnkz6Rn6LoOlOl',
@@ -88,13 +91,20 @@ def compress_online(source_path, output_path):
         result = False
     except errors.ConnectError as e:
         # A network connection error occurred.
-        print("网络故障。。。休息1秒继续")
-        time.sleep(1)
+        print("网络故障。。。休息{0}秒继续".format(ERR_WAIT_TIME))
+        time.sleep(ERR_WAIT_TIME)
         result = compress_online(source_path, output_path)  # 递归方法 继续读取
     except Exception as e:
         # Something else went wrong, unrelated to the Tinify API.
-        print("Something else went wrong, unrelated to the Tinify API.  %s" % e)
-        result = False
+        err_msg = ("Something else went wrong, unrelated to the Tinify API.  %s" % e)
+        print(err_msg)
+        if 'Connection aborted' in err_msg:  # 连接异常，需要重试
+            print("网络故障。。。休息{0}秒继续".format(ERR_WAIT_TIME))
+            time.sleep(ERR_WAIT_TIME)
+            result = compress_online(source_path, output_path)  # 递归方法 继续读取
+            pass
+        else:
+            result = False
     else:
         if os.path.exists(source_path) and os.path.exists(output_path):
             source_size = os.path.getsize(source_path)
