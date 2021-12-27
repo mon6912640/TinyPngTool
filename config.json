@@ -1,10 +1,28 @@
 {
   "sourcePath": "./source",
-  "outputPath": "./fuck",
-
+  "outputPath": "./compress",
+  "proxy": "",
   "keys": [
-    "G2oCafKlhjcHoHQokyvnkz6Rn6LoOlOl",
     "RdHoRF9i936xXJCP-ES2c9YCHB0MhxOh",
-    "q20BBKkn5t6_AZBxYL1sJcLiW0a4Cufq"
+    "q20BBKkn5t6_AZBxYL1sJcLiW0a4Cufq",
+    "G2oCafKlhjcHoHQokyvnkz6Rn6LoOlOl",
+    "H6tGTs8idRsrUIdbGpn7Pgkex57TdnUF",
+    "ArUY2TRH5hJFPpLWAePtA1wjiSp8rPlu",
+    "YOHzlt3HdTr6CJ5k66Sw7CVo7sSbmELb",
+    "cD8HHAQ45OQfZsFvYgVIl2vx3OIks47W",
+    "vkyEWX15wtaRQkDahajR0nThAAaPnYSf",
+    "cEfHShkTZjxhiWeWlJIqBLbzmDOKA25v",
+    "ZRLVA4TdCAZBS5r7DozHsksRCKAp7Buy",
+    "84trDD22bwUo2MRoNBVhsRpaEBud04vc",
+    "RklokNr8wfx35oY3QoJHXkLTmXOFWU0u",
+    "4MAKrrYtP9rLFpIxz4bocuPkOXY9FDGT",
+    "mQdBI1CulQugJIrpwc7xOafGxdrr4nAA",
+    "7v3nrQeDrrDGB7JNgDW0dyRcpQMqZ1fd",
+    "mBRjtME5TCdbJxhRznOv2CyL0LnhFNXr",
+    "WlmHrMfV3Qv4dUOotpIzMzqQ3w1Zljjt",
+    "gtWuM5ZKeWo0hhsFIdbL1wHYeTwg0mys",
+    "iJXIfpDXG5bcR08TKHh7KCxQ6YAiemSC",
+    "utz8i1mtt92YNDdH7MLjQErnfKZNrn4P",
+    "yLU2IyPW21i9yweJDAuZDVXyo7OuFlct"
   ]
 }
